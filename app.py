@@ -100,8 +100,6 @@ def start():
 if __name__ == '__main__':
     print()
     course_lesson = select_lesson()
-    print(course_lesson)
-    exit()
     browser = webdriver.Firefox(service=Service(GeckoDriverManager().install()))
     presence = partial(EC.presence_of_element_located, locator=By.XPATH)
     _wait = WebDriverWait(browser, 60)
