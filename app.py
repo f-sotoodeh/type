@@ -15,7 +15,10 @@ from time import sleep
 
 
 def wait():
-    playsound('87478.mp3')
+    try:
+        playsound('87478.mp3')
+    except:
+        pass
     input('Press ENTER')
     # modal = browser.find_element(By.CLASS_NAME, 'modal')
     # print()
@@ -31,23 +34,25 @@ def wait():
     # sleep(1)
 
 def select_lesson():
-    # if default:
-    #     return COURSE, LESSON, PART
-    # course = input('Which course? ')
-    # lesson = input('Which lesson? ')
-    # part = input('Which part? ')
-    # return course, lesson, part
     with open('data.yaml') as f:
         data = load(f)
     for i, course in enumerate(data.keys(), start=1):
-        print(i, '-', course)
+        print(i, course, sep=' >> ')
     ci = int(input('Which one? ')) - 1
     course = list(data.keys())[ci]
     for i, lesson in enumerate(data[course], start=1):
-        print(i, '-', lesson)
+        print(i, lesson, sep=' >> ')
     li = int(input('Which one? ')) - 1
     lesson = list(data[course].keys())[li]
     part = data[course][lesson]
+    if type(part) == list:
+        if len(part) == 1:
+            part = part[0]
+        else:
+            for i, p in enumerate(part, start=1):
+                print(i, p, sep=' >> ')
+            pi = int(input('Which one? ')) - 1
+            part = part[pi]
     return course, lesson, part
 
 def login():
@@ -95,6 +100,8 @@ def start():
 if __name__ == '__main__':
     print()
     course_lesson = select_lesson()
+    print(course_lesson)
+    exit()
     browser = webdriver.Firefox(service=Service(GeckoDriverManager().install()))
     presence = partial(EC.presence_of_element_located, locator=By.XPATH)
     _wait = WebDriverWait(browser, 60)
